@@ -47,7 +47,7 @@
               <a class="nav-link" href="#">Contatti</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./carrello.html" id="cart-link">
+              <a class="nav-link" href="#" id="cart-link">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -72,6 +72,13 @@
       <div class="row row-cols-1 row-cols-md-3 g-4" id="book-list">
         <!-- Qui verranno inserite le card dei libri -->
       </div>
+    </div>
+
+    <div class="container mt-5" id="cart-container" style="display: none">
+      <h2>Carrello</h2>
+      <ul id="cart-list"></ul>
+      <p id="total-price"></p>
+      <button onclick="purchase()">Concludi Acquisto</button>
     </div>
 
     <footer>

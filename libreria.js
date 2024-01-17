@@ -1,6 +1,9 @@
 (function () {
   const bookListContainer = document.getElementById("book-list");
   const cartListContainer = document.getElementById("cart-list");
+  const cartContainer = document.getElementById("cart-container");
+  const totalPriceElement = document.getElementById("total-price");
+  const clearCartButton = document.getElementById("clear-cart");
   let cartItems = [];
 
   function getBooks() {
@@ -19,16 +22,16 @@
       const card = document.createElement("div");
       card.className = "col";
       card.innerHTML = `
-            <div class="card">
-              <img src="${book.img}" class="card-img-top" alt="${book.title}">
-              <div class="card-body">
-                <h5 class="card-title">${book.title}</h5>
-                <p class="card-text">Prezzo: ${book.price}</p>
-                <button class="btn btn-danger remove-btn" onclick="removeCard(this)">Scarta</button>
-                <button class="btn btn-primary purchase-btn" onclick="addToCart('${book.title}', '${book.price}')">Compra ora</button>
-              </div>
-            </div>
-          `;
+                <div class="card">
+                  <img src="${book.img}" class="card-img-top" alt="${book.title}">
+                  <div class="card-body">
+                    <h5 class="card-title">${book.title}</h5>
+                    <p class="card-text">Prezzo: ${book.price}</p>
+                    <button class="btn btn-danger remove-btn" onclick="removeCard(this)">Scarta</button>
+                    <button class="btn btn-primary purchase-btn" onclick="addToCart('${book.title}', '${book.price}')">Compra ora</button>
+                  </div>
+                </div>
+              `;
       bookListContainer.appendChild(card);
     });
   }
@@ -38,6 +41,7 @@
     cartItems.push(cartItem);
     saveCartToStorage();
     updateCartUI();
+    showCart();
   }
 
   function removeCard(button) {
@@ -63,14 +67,28 @@
       cartListContainer.appendChild(cartItem);
     });
 
-    const totalPriceElement = document.getElementById("total-price");
     const totalPrice = cartItems
       .reduce((acc, item) => acc + parseFloat(item.price.replace("€", "")), 0)
       .toFixed(2);
     totalPriceElement.innerText = `Totale: €${totalPrice}`;
   }
 
+  function showCart() {
+    cartContainer.style.display = "block";
+  }
+
   function purchase() {
+    cartItems = [];
+    saveCartToStorage();
+    updateCartUI();
+    hideCart();
+  }
+
+  function hideCart() {
+    cartContainer.style.display = "none";
+  }
+
+  function clearCart() {
     cartItems = [];
     saveCartToStorage();
     updateCartUI();
@@ -82,34 +100,9 @@
   // Assegna le funzioni al contesto globale
   window.addToCart = addToCart;
   window.removeCard = removeCard;
+  window.purchase = purchase;
+  window.clearCart = clearCart;
+
+  // Aggiunge l'evento click al bottone per cancellare il carrello
+  clearCartButton.addEventListener("click", clearCart);
 })();
-function purchase() {
-  // Aggiorna l'UI con la lista dei libri nel carrello
-  const cartListContainer = document.getElementById("cart-list");
-  cartListContainer.innerHTML = "";
-
-  cartItems.forEach((item) => {
-    const cartItem = document.createElement("li");
-    cartItem.innerText = `${item.title} - ${item.price}`;
-    cartListContainer.appendChild(cartItem);
-  });
-
-  // Calcola e mostra il totale nella UI
-  const totalPriceElement = document.getElementById("total-price");
-  const totalPrice = cartItems
-    .reduce((acc, item) => acc + parseFloat(item.price.replace("€", "")), 0)
-    .toFixed(2);
-  totalPriceElement.innerText = `Totale: €${totalPrice}`;
-
-  // Optional: Puoi nascondere la sezione dei libri nel catalogo
-  const bookListContainer = document.getElementById("book-list");
-  bookListContainer.style.display = "none";
-
-  // Puoi anche effettuare altre azioni, ad esempio un messaggio di conferma
-  alert("Grazie per il tuo acquisto!");
-
-  // Opzionale: Puoi reimpostare il carrello a vuoto dopo l'acquisto
-  cartItems = [];
-  saveCartToStorage();
-  updateCartUI();
-}

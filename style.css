@@ -41,7 +41,7 @@ a {
 }
 
 .container {
-  margin-top: 50px; /* Spazio tra il contenuto principale e il footer */
+  margin-top: 50px;
 }
 
 .card {
@@ -51,4 +51,13 @@ a {
 .card img {
   object-fit: cover;
   height: 200px;
+}
+
+/* Modifiche per la navbar e il logo */
+.navbar {
+  background-color: #2f3031; /* Colore grigio chiaro */
+}
+
+.navbar-brand img {
+  height: 60px !important; /* Altezza del logo aumentata con !important */
 }
